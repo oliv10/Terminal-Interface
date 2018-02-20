@@ -13,6 +13,7 @@ class Command(Cmd, Log):
         Cmd.__init__(self, stdout=self.storage)
 
     def do_quit(self, args):
+        """Quits and shuts down the program."""
         if args:
             self.unknown(args=args)
         else:
@@ -21,17 +22,12 @@ class Command(Cmd, Log):
             Log.close(self)
             raise SystemExit
 
-    def help_quit(self):
-        self.write("Quits and shuts down the program.")
-
     def do_clear(self, args):
+        """Clears the screen."""
         if args:
             self.unknown(args=args)
         else:
             self.write(CLEAR)
-
-    def help_clear(self):
-        self.write("Clears the screen with new lines.")
 
     def default(self, line):
         self.unknown(line)
