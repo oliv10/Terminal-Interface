@@ -1,6 +1,7 @@
 from Terminal import Cmd
 from Terminal.log import Log
 from Terminal.constants import *
+from Programs import program
 
 
 class Command(Cmd, Log):
@@ -10,7 +11,8 @@ class Command(Cmd, Log):
 
     def __init__(self):
         Log.__init__(self)
-        Cmd.__init__(self, stdout=self.storage)
+        # Cmd.__init__(self, stdout=self.storage)
+        Cmd.__init__(self)
 
     def do_quit(self, args):
         """Quits and shuts down the program."""
@@ -40,9 +42,45 @@ class Command(Cmd, Log):
         else:
             self.write("Unknown")
 
-    def onecmd(self, line):
-        super(Command, self).onecmd(line)
+    def cmd(self, line):
+        self.onecmd(line)
         return self.postcmd()
+
+    def onecmd(self, line) -> 'Re-writen to allow for custom programs':
+        """Interpret the argument as though it had been typed in response
+        to the prompt.
+
+        This may be overridden, but should not normally need to be;
+        see the precmd() and postcmd() methods for useful execution hooks.
+        The return value is a flag indicating whether interpretation of
+        commands by the interpreter should stop.
+
+        """
+        cmd, arg, line = self.parseline(line)
+        if not line:
+            return self.emptyline()
+        if cmd is None:
+            return self.default(line)
+        self.lastcmd = line
+        if line == 'EOF' :
+            self.lastcmd = ''
+        if cmd == '':
+            return self.default(line)
+        else:
+
+            if len(program) > 0:
+                for file in program:
+                    try:
+                        func = getattr(file, 'do_' + cmd)
+                        return func(file, arg)
+                    except AttributeError:
+                        pass
+            else:
+                try:
+                    func = getattr(self, 'do_' + cmd)
+                    return func(self, arg)
+                except AttributeError:
+                    return self.default(line)
 
     def postcmd(self, stop=None, line=None):
         super(Command, self).postcmd(stop, line)

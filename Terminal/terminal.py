@@ -32,6 +32,8 @@ class Terminal(Tk, Command):
         self.entry.pack(side=LEFT)
 
     def update_text(self, text):
+        if not text:
+            return
         self.text.configure(state=NORMAL)
         if text[0] == CLEAR:
             self.text.delete('1.0', END)
@@ -44,6 +46,6 @@ class Terminal(Tk, Command):
     def action(self, key):
         action = key.keycode
         if action == ENTER:
-            text = Command.onecmd(self, self.entry.get())
+            text = Command.cmd(self, self.entry.get())
             self.update_text(text)
             self.entry.delete(0, END)
