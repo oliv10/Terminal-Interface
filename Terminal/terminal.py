@@ -23,7 +23,7 @@ class Terminal(Tk, Command):
         self.entry.bind("<Key>", self.action)
         self.entry.configure(width=100)
 
-        self.text.configure(background="black", foreground="white", state=DISABLED)
+        self.text.configure(background="black", foreground="white", state=DISABLED, wrap=WORD)
 
         label = Label(self, text=CMD)
 

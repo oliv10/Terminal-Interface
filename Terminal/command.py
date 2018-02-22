@@ -33,8 +33,7 @@ class Command(Cmd, Log):
             self.write(CLEAR)
 
     def do_programs(self, args):
-        """Lists all downloaded programs."""
-
+        """List downloaded programs with "programs" or detailed functions of programs with "programs <program>"."""
         if args:
             methods = []
             temp = []
@@ -111,6 +110,7 @@ class Command(Cmd, Log):
     def do_help(self, arg) -> 'Re-written to allow to custom programs and automatic helping.':
         """List available commands with "help" or detailed help with "help cmd"."""
         if arg:
+            func = None
             for file in PROGRAMS:
                 f = importlib.import_module(PROGRAM_PATH + file)
                 try:
@@ -122,8 +122,12 @@ class Command(Cmd, Log):
                             self.write("%s\n" % str(doc))
                             return
                     except AttributeError:
-                        pass
-                    super(Command, self).do_help(arg)
+                        super(Command, self).do_help(arg)
+                        return
+                    return
+                func()
+        else:
+            super(Command, self).do_help(arg)
 
     def postcmd(self, stop=None, line=None) -> 'Re-written to allow for responses to be returned properly.':
         super(Command, self).postcmd(stop, line)

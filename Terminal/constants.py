@@ -3,7 +3,7 @@ ENTER = 13
 
 # Default Texts
 CMD = '>>> '
-PROGRAM_HEAD = ["Programs (Type programs <topic>):", "Builtins:", "Downloaded:", "Undocumented:"]
+PROGRAM_HEAD = ["Methods (Type programs <topic>):", "Builtins:", "Downloaded:", "Undocumented:"]
 ATTR = 'ATTR'
 
 # Window Sizes
