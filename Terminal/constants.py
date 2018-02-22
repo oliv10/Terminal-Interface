@@ -1,9 +1,10 @@
-# Key Identifier for Enter
+# Key Identifiers
 ENTER = 13
 
 # Default Texts
 CMD = '>>> '
-PROGRAM_HEAD = "Programs (Type programs <topic> for methods):"
+PROGRAM_HEAD = ["Programs (Type programs <topic>):", "Builtins:", "Downloaded:", "Undocumented:"]
+ATTR = 'ATTR'
 
 # Window Sizes
 WIDTH = 500

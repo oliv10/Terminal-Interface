@@ -1,4 +1,8 @@
+ATTR = 1
+
+
 def do_add(self, args):
+    """Adds numbers together."""
     ans = 0
     if args:
         nums = args.split(' ')

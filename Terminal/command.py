@@ -34,19 +34,39 @@ class Command(Cmd, Log):
 
     def do_programs(self, args):
         """Lists all downloaded programs."""
-        methods = []
-        temp = []
 
         if args:
+            methods = []
+            temp = []
             for file in PROGRAMS:
                 m = importlib.import_module(PROGRAM_PATH + file)
                 temp = dir(m)
             for method in temp:
                 if method[:3] == 'do_':
                     methods.append(method[3:])
-            self.print_topics(PROGRAM_HEAD, methods, 15, 80)
+            self.print_topics(PROGRAM_HEAD[0], methods, 15, 80)
         else:
-            self.print_topics(PROGRAM_HEAD, PROGRAMS, 15, 80)
+            pro_builtin = []
+            pro_download = []
+            pro_unknown = []
+
+            for file in PROGRAMS:
+                f = importlib.import_module(PROGRAM_PATH + file)
+                attr = None
+                try:
+                    attr = getattr(f, ATTR)
+                except AttributeError:
+                    pro_unknown.append(file)
+                if attr == 1:
+                    pro_builtin.append(file)
+                elif attr == 2:
+                    pro_download.append(file)
+                else:
+                    pass
+
+            self.print_topics(PROGRAM_HEAD[1], pro_builtin, 15, 80)
+            self.print_topics(PROGRAM_HEAD[2], pro_download, 15, 80)
+            self.print_topics(PROGRAM_HEAD[3], pro_unknown, 15, 80)
 
     def default(self, line):
         self.unknown(line)
@@ -63,7 +83,7 @@ class Command(Cmd, Log):
         self.onecmd(line)
         return self.postcmd()
 
-    def onecmd(self, line) -> 'Re-writen to allow for custom programs and automatic importing':
+    def onecmd(self, line) -> 'Re-writen to allow for custom programs and automatic importing.':
         cmd, arg, line = self.parseline(line)
         if not line:
             return self.emptyline()
@@ -87,7 +107,24 @@ class Command(Cmd, Log):
             except AttributeError:
                 return self.default(line)
             return func(arg)
+        
+    def do_help(self, arg) -> 'Re-written to allow to custom programs and automatic helping.':
+        """List available commands with "help" or detailed help with "help cmd"."""
+        if arg:
+            for file in PROGRAMS:
+                f = importlib.import_module(PROGRAM_PATH + file)
+                try:
+                    func = getattr(f, 'help_' + arg)
+                except AttributeError:
+                    try:
+                        doc = getattr(f, 'do_' + arg).__doc__
+                        if doc:
+                            self.write("%s\n" % str(doc))
+                            return
+                    except AttributeError:
+                        pass
+                    super(Command, self).do_help(arg)
 
-    def postcmd(self, stop=None, line=None):
+    def postcmd(self, stop=None, line=None) -> 'Re-written to allow for responses to be returned properly.':
         super(Command, self).postcmd(stop, line)
         return self.get()
