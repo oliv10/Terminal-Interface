@@ -1,8 +1,9 @@
 # Key Identifier for Enter
 ENTER = 13
 
-# Command Prompt Text
+# Default Texts
 CMD = '>>> '
+PROGRAM_HEAD = "Programs (Type programs <topic> for methods):"
 
 # Window Sizes
 WIDTH = 500
@@ -13,6 +14,7 @@ TEMPFILE = 'temp.txt'
 
 # File Paths
 LOGPATH = "/Logs/"
+PROGRAM_PATH = "Programs."
 
 # Hard Coded Commands
 CLEAR = 'CLEAR SCREEN\n'

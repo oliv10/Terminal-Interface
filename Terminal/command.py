@@ -1,7 +1,8 @@
 from Terminal import Cmd
 from Terminal.log import Log
 from Terminal.constants import *
-from Programs import program
+from Programs import program as PROGRAMS
+import importlib
 
 
 class Command(Cmd, Log):
@@ -11,8 +12,8 @@ class Command(Cmd, Log):
 
     def __init__(self):
         Log.__init__(self)
-        # Cmd.__init__(self, stdout=self.storage)
-        Cmd.__init__(self)
+        Cmd.__init__(self, stdout=self.storage)
+        # Cmd.__init__(self)
 
     def do_quit(self, args):
         """Quits and shuts down the program."""
@@ -31,6 +32,22 @@ class Command(Cmd, Log):
         else:
             self.write(CLEAR)
 
+    def do_programs(self, args):
+        """Lists all downloaded programs."""
+        methods = []
+        temp = []
+
+        if args:
+            for file in PROGRAMS:
+                m = importlib.import_module(PROGRAM_PATH + file)
+                temp = dir(m)
+            for method in temp:
+                if method[:3] == 'do_':
+                    methods.append(method[3:])
+            self.print_topics(PROGRAM_HEAD, methods, 15, 80)
+        else:
+            self.print_topics(PROGRAM_HEAD, PROGRAMS, 15, 80)
+
     def default(self, line):
         self.unknown(line)
 
@@ -46,16 +63,7 @@ class Command(Cmd, Log):
         self.onecmd(line)
         return self.postcmd()
 
-    def onecmd(self, line) -> 'Re-writen to allow for custom programs':
-        """Interpret the argument as though it had been typed in response
-        to the prompt.
-
-        This may be overridden, but should not normally need to be;
-        see the precmd() and postcmd() methods for useful execution hooks.
-        The return value is a flag indicating whether interpretation of
-        commands by the interpreter should stop.
-
-        """
+    def onecmd(self, line) -> 'Re-writen to allow for custom programs and automatic importing':
         cmd, arg, line = self.parseline(line)
         if not line:
             return self.emptyline()
@@ -67,20 +75,18 @@ class Command(Cmd, Log):
         if cmd == '':
             return self.default(line)
         else:
-
-            if len(program) > 0:
-                for file in program:
-                    try:
-                        func = getattr(file, 'do_' + cmd)
-                        return func(file, arg)
-                    except AttributeError:
-                        pass
-            else:
+            for file in PROGRAMS:
+                f = importlib.import_module(PROGRAM_PATH + file)
                 try:
-                    func = getattr(self, 'do_' + cmd)
+                    func = getattr(f, 'do_' + cmd)
                     return func(self, arg)
                 except AttributeError:
-                    return self.default(line)
+                    pass
+            try:
+                func = getattr(self, 'do_' + cmd)
+            except AttributeError:
+                return self.default(line)
+            return func(arg)
 
     def postcmd(self, stop=None, line=None):
         super(Command, self).postcmd(stop, line)
