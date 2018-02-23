@@ -1,5 +1,5 @@
 ATTR = 1
-"""Hello"""
+
 
 def do_add(self, args):
     """Adds numbers together."""

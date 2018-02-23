@@ -42,6 +42,7 @@ class Terminal(Tk, Command):
                 self.text.insert(INSERT, CMD + line)
         self.text.configure(state=DISABLED)
         self.text.update()
+        self.text.see(END)
 
     def action(self, key):
         action = key.keycode
