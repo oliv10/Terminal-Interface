@@ -1,7 +1,7 @@
-ATTR = 1
+ATTR = 1  # Tells the terminal where this program came from ex (Downloaded, Builtin, or Unknown if variable not found #
 
 
-def do_add(self, args):
+def do_add(self, args):  # This is the command that can be called from within the terminal #
     """Adds numbers together."""
     ans = 0
     if args:
