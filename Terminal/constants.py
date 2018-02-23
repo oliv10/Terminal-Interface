@@ -20,5 +20,6 @@ PROGRAM_PATH = "Programs."
 # Hard Coded Commands
 CLEAR = 'CLEAR SCREEN\n'
 
-# Log Properties
+# Properties
 SAVELOG = False
+DEBUG = False
