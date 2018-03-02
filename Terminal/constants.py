@@ -5,6 +5,7 @@ ENTER = 13
 CMD = '>>> '
 PROGRAM_HEAD = ["Methods (Type programs <topic>):", "Builtins:", "Downloaded:", "Undocumented:"]
 ATTR = 'ATTR'
+ATTRTYPE = ["Builtin", "Downloaded", "Unknown"]
 
 # Window Sizes
 WIDTH = 500

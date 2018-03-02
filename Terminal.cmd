@@ -1,0 +1,2 @@
+call start.cmd
+exit

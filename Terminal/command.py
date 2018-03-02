@@ -37,9 +37,11 @@ class Command(Cmd, Log):
         if args:
             methods = []
             temp = []
-            for file in PROGRAMS:
-                m = importlib.import_module(PROGRAM_PATH + file)
+            try:
+                m = importlib.import_module(PROGRAM_PATH + args)
                 temp = dir(m)
+            except ImportError:
+                pass
             for method in temp:
                 if method[:3] == 'do_':
                     methods.append(method[3:])

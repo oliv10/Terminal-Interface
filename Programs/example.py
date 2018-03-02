@@ -1,4 +1,4 @@
-ATTR = 1  # Tells the terminal where this program came from ex (Downloaded, Builtin, or Unknown if variable not found #
+ATTR = 1  # Tells the terminal where this program came from ex (Downloaded, Builtin, or Unknown if variable not found)
 
 
 def do_add(self, args):  # This is the command that can be called from within the terminal #
